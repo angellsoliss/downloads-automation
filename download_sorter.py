@@ -1,5 +1,6 @@
 import os
 
+#rename file if shares the same name as another file in a folder
 def duplicate_file(filename, folder):
     base, ext = os.path.splitext(filename)
 
@@ -10,7 +11,7 @@ def duplicate_file(filename, folder):
         os.rename(os.path.join(folder, filename), os.path.join(folder, duplicate_filename))
         counter += 1
 
-
+#formate file names, make them lowercase and replace spaces with underscores
 def lowercase_extension(filename):
     name, ext = os.path.splitext(filename)
     if name and ext:
@@ -18,57 +19,47 @@ def lowercase_extension(filename):
         adjusted_name = adjusted_name.replace(' ', '_')  
         return adjusted_name
 
+#create folders in download directory if they do not exist
 def create_folders():
-    #create a folder for PDFs if it doesn't exist
     pdf_folder = os.path.join(DOWNLOADS_FOLDER, 'PDFs')
     if not os.path.exists(pdf_folder):
         os.makedirs(pdf_folder)
 
-    #same for images
     img_folder = os.path.join(DOWNLOADS_FOLDER, 'Images')
     if not os.path.exists(img_folder):
         os.makedirs(img_folder)
 
-    #same for videos
     video_folder = os.path.join(DOWNLOADS_FOLDER, 'Videos')
     if not os.path.exists(video_folder):
         os.makedirs(video_folder)
 
-    #same for documents
     doc_folder = os.path.join(DOWNLOADS_FOLDER, 'Documents')
     if not os.path.exists(doc_folder):
         os.makedirs(doc_folder)
 
-    #same for music
     music_folder = os.path.join(DOWNLOADS_FOLDER, 'Music')
     if not os.path.exists(music_folder):
         os.makedirs(music_folder)
 
-    #same for programming files
     prog_folder = os.path.join(DOWNLOADS_FOLDER, 'Programming')
     if not os.path.exists(prog_folder):
         os.makedirs(prog_folder)
-    
-    #same for zips
+
     zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed_ZIPS')
     if not os.path.exists(zip_folder):
         os.makedirs(zip_folder)
 
-    #same for extracted files
     extracted_folder = os.path.join(DOWNLOADS_FOLDER, 'Extracted')
     if not os.path.exists(extracted_folder):
         os.makedirs(extracted_folder)
 
-    #same for miscellaneous files
     misc_folder = os.path.join(DOWNLOADS_FOLDER, 'Miscellaneous')
     if not os.path.exists(misc_folder):
         os.makedirs(misc_folder)  
 
-#designate downloads folder
+#designate downloads folder/overhead
 DOWNLOADS_FOLDER = (os.path.expanduser("~\Downloads"))
-
 create_folders()
-
 extracted = []
 
 #iterate through compressed files, grab names
@@ -107,7 +98,7 @@ for file in os.listdir(DOWNLOADS_FOLDER):
         #designate pdf folder
         pdf_folder = os.path.join(DOWNLOADS_FOLDER, 'PDFs')
 
-        #check for duplicates
+        #check for duplicates in pdf folder
         duplicate_file(file, pdf_folder)
 
         #move file from downloads folder to pdf folder by renaming it
