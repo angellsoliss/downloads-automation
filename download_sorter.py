@@ -50,9 +50,14 @@ def create_folders():
         os.makedirs(prog_folder)
     
     #same for zips
-    zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed')
+    zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed_ZIPS')
     if not os.path.exists(zip_folder):
         os.makedirs(zip_folder)
+
+    #same for extracted files
+    extracted_folder = os.path.join(DOWNLOADS_FOLDER, 'Extracted')
+    if not os.path.exists(extracted_folder):
+        os.makedirs(extracted_folder)
 
     #same for miscellaneous files
     misc_folder = os.path.join(DOWNLOADS_FOLDER, 'Miscellaneous')
@@ -63,6 +68,13 @@ def create_folders():
 DOWNLOADS_FOLDER = (os.path.expanduser("~\Downloads"))
 
 create_folders()
+
+extracted = []
+
+#iterate through compressed files, grab names
+for file in os.listdir(os.path.join(DOWNLOADS_FOLDER, 'Compressed_ZIPS')):
+    zip_name, ext = os.path.splitext(file)
+    extracted.append(zip_name)
 
 #adjust file names to lowercase and replace spaces with underscores first
 for file in os.listdir(DOWNLOADS_FOLDER):
@@ -81,9 +93,14 @@ for file in os.listdir(DOWNLOADS_FOLDER):
     if file.endswith(('.exe', '.bat', '.sh', '.cmd', '.msi', '.apk')):
         continue
 
-    #if file is a directory, skip
+    #if file is a directory, check if it matches the name of a compressed file
     if os.path.isdir(os.path.join(DOWNLOADS_FOLDER, file)):
-        continue
+        if file in extracted:
+            extracted_folder = os.path.join(DOWNLOADS_FOLDER, 'Extracted')
+            duplicate_file(file, extracted_folder)
+            os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(extracted_folder, file))
+        else:
+            continue
 
     #if file is a pdf
     elif file.endswith('.pdf'):
@@ -116,10 +133,13 @@ for file in os.listdir(DOWNLOADS_FOLDER):
         duplicate_file(file, prog_folder)
         os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(prog_folder, file))
     elif file.endswith(('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz')):
-        zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed')
+        zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed_ZIPS')
         duplicate_file(file, zip_folder)
         os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(zip_folder, file))
     else:
         misc_folder = os.path.join(DOWNLOADS_FOLDER, 'Miscellaneous')
         duplicate_file(file, misc_folder)
         os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(misc_folder, file))
+
+#troubleshooting
+#print(extracted)
