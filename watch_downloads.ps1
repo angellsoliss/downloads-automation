@@ -31,7 +31,6 @@ Register-ObjectEvent $watcher "Created" -Action {
     python .\download_sorter.py
 } | Out-Null
 
-
 #print controls and instructions to terminal
 Write-Host "Watching $downloads for new files"
 Write-Host "Press Ctrl-C to exit"
