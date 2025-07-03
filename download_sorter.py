@@ -6,10 +6,14 @@ def duplicate_file(filename, folder):
 
     #increment counter for every duplicate
     counter = 1
+
+    #check if newly downloaded file has the same name as an existing file in target folder
     while os.path.exists(os.path.join(folder, filename)):
-        duplicate_filename = f"{base}_{counter}{ext}"
-        os.rename(os.path.join(folder, filename), os.path.join(folder, duplicate_filename))
+        #if so, edit name of newly downloaded file
+        filename = f"{base}_{counter}{ext}"
         counter += 1
+    
+    return filename
 
 #formate file names, make them lowercase and replace spaces with underscores
 def lowercase_extension(filename):
@@ -99,38 +103,39 @@ for file in os.listdir(DOWNLOADS_FOLDER):
         pdf_folder = os.path.join(DOWNLOADS_FOLDER, 'PDFs')
 
         #check for duplicates in pdf folder
-        duplicate_file(file, pdf_folder)
+        #if file is not a duplicate, name will remain unchanged
+        unique_name = duplicate_file(file, pdf_folder)
 
         #move file from downloads folder to pdf folder by renaming it
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(pdf_folder, file))
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(pdf_folder, unique_name))
     elif file.endswith(('.jpg', '.jpeg', '.png', '.gif', '.heic', '.jfif', '.ico')):
         img_folder = os.path.join(DOWNLOADS_FOLDER, 'Images')
-        duplicate_file(file, img_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(img_folder, file))
+        unique_name = duplicate_file(file, img_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(img_folder, unique_name))
     elif file.endswith(('.mp4', '.mov', '.avi', '.wmv', '.mkv', '.flv', '.webm')):
         video_folder = os.path.join(DOWNLOADS_FOLDER, 'Videos')
-        duplicate_file(file, video_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(video_folder, file))
+        unique_name = duplicate_file(file, video_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(video_folder, unique_name))
     elif file.endswith(('.mp3', '.wav', '.aac', '.flac', '.aiff', '.wma', '.ogg', '.m4a', '.mid')):
         music_folder = os.path.join(DOWNLOADS_FOLDER, 'Music')
-        duplicate_file(file, music_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(music_folder, file))
+        unique_name = duplicate_file(file, music_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(music_folder, unique_name))
     elif file.endswith(('.docx', '.doc', '.txt', '.csv', '.ppt', '.pptx', '.html', '.xlsx')):
         doc_folder = os.path.join(DOWNLOADS_FOLDER, 'Documents')
-        duplicate_file(file, doc_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(doc_folder, file))
+        unique_name = duplicate_file(file, doc_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(doc_folder, unique_name))
     elif file.endswith(('.py', '.js', '.java', '.cpp', '.c', '.cs', '.css', '.php', '.sql', '.asm')):
         prog_folder = os.path.join(DOWNLOADS_FOLDER, 'Programming')
-        duplicate_file(file, prog_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(prog_folder, file))
+        unique_name = duplicate_file(file, prog_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(prog_folder, unique_name))
     elif file.endswith(('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz')):
         zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed_ZIPS')
-        duplicate_file(file, zip_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(zip_folder, file))
+        unique_name = duplicate_file(file, zip_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(zip_folder, unique_name))
     else:
         misc_folder = os.path.join(DOWNLOADS_FOLDER, 'Miscellaneous')
-        duplicate_file(file, misc_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(misc_folder, file))
+        unique_name = duplicate_file(file, misc_folder)
+        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(misc_folder, unique_name))
 
 #troubleshooting
 #print(extracted)
