@@ -1,4 +1,13 @@
 import os
+import json
+
+#load config file
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+
+#assign categories and what to skip from config
+categories = config["Categories"]
+skip = config["Skip"]
 
 #rename file if shares the same name as another file in a folder
 def duplicate_file(filename, folder):
@@ -84,8 +93,11 @@ for file in os.listdir(DOWNLOADS_FOLDER):
 
 #iterate through files in the downloads folder
 for file in os.listdir(DOWNLOADS_FOLDER):
+    #split file name and extension
+    file_name, ext = os.path.splitext(file)
+
     #if file is an executable, skip
-    if file.endswith(('.exe', '.bat', '.sh', '.cmd', '.msi', '.apk')):
+    if ext in config["Skip"]:
         continue
 
     #if file is a directory, check if it matches the name of a compressed file
@@ -96,43 +108,31 @@ for file in os.listdir(DOWNLOADS_FOLDER):
             os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(extracted_folder, file))
         else:
             continue
+    
+    #flag to check if file has been moved
+    moved = False
 
-    #if file is a pdf
-    elif file.endswith('.pdf'):
-        #designate pdf folder
-        pdf_folder = os.path.join(DOWNLOADS_FOLDER, 'PDFs')
+    #iterate through categories dictionary, save category and extension array
+    for category, extensions in categories.items():
 
-        #check for duplicates in pdf folder
-        #if file is not a duplicate, name will remain unchanged
-        unique_name = duplicate_file(file, pdf_folder)
+        #if file extension matches an extension in any of the valid categories
+        if ext in extensions:
+            #designate appropriate folder
+            target_folder = os.path.join(DOWNLOADS_FOLDER, category)
 
-        #move file from downloads folder to pdf folder by renaming it
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(pdf_folder, unique_name))
-    elif file.endswith(('.jpg', '.jpeg', '.png', '.gif', '.heic', '.jfif', '.ico')):
-        img_folder = os.path.join(DOWNLOADS_FOLDER, 'Images')
-        unique_name = duplicate_file(file, img_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(img_folder, unique_name))
-    elif file.endswith(('.mp4', '.mov', '.avi', '.wmv', '.mkv', '.flv', '.webm')):
-        video_folder = os.path.join(DOWNLOADS_FOLDER, 'Videos')
-        unique_name = duplicate_file(file, video_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(video_folder, unique_name))
-    elif file.endswith(('.mp3', '.wav', '.aac', '.flac', '.aiff', '.wma', '.ogg', '.m4a', '.mid')):
-        music_folder = os.path.join(DOWNLOADS_FOLDER, 'Music')
-        unique_name = duplicate_file(file, music_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(music_folder, unique_name))
-    elif file.endswith(('.docx', '.doc', '.txt', '.csv', '.ppt', '.pptx', '.html', '.xlsx')):
-        doc_folder = os.path.join(DOWNLOADS_FOLDER, 'Documents')
-        unique_name = duplicate_file(file, doc_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(doc_folder, unique_name))
-    elif file.endswith(('.py', '.js', '.java', '.cpp', '.c', '.cs', '.css', '.php', '.sql', '.asm')):
-        prog_folder = os.path.join(DOWNLOADS_FOLDER, 'Programming')
-        unique_name = duplicate_file(file, prog_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(prog_folder, unique_name))
-    elif file.endswith(('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz')):
-        zip_folder = os.path.join(DOWNLOADS_FOLDER, 'Compressed_ZIPS')
-        unique_name = duplicate_file(file, zip_folder)
-        os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(zip_folder, unique_name))
-    else:
+            #save unique name
+            unique_name = duplicate_file(file, os.path.join(DOWNLOADS_FOLDER, category))
+
+            #move file to appropriate folder
+            os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(target_folder, unique_name))
+
+            moved = True
+
+            #break loop since file has been moved, no need to check other categories
+            break
+
+    #if file has not been moved, then it belongs in misc
+    if not moved:
         misc_folder = os.path.join(DOWNLOADS_FOLDER, 'Miscellaneous')
         unique_name = duplicate_file(file, misc_folder)
         os.rename(os.path.join(DOWNLOADS_FOLDER, file), os.path.join(misc_folder, unique_name))

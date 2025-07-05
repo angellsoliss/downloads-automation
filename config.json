@@ -1,0 +1,13 @@
+{
+    "Categories": {
+        "PDFs": [".pdf"],
+        "Images": [".jpg", ".jpeg", ".png", ".gif", ".heic", ".jfif", ".ico"],
+        "Videos": [".mp4", ".mov", ".avi", ".wmv", ".mkv", ".flv", ".webm"],
+        "Music": [".mp3", ".wav", ".aac", ".flac", ".aiff", ".wma", ".ogg", ".m4a", ".mid"],
+        "Documents": [".docx", ".doc", ".txt", ".csv", ".ppt", ".pptx", ".html", ".xlsx"],
+        "Programming": [".py", ".js", ".java", ".cpp", ".c", ".cs", ".css", ".php", ".sql", ".asm"],
+        "Compressed_ZIPS": [".zip", ".tar", ".gz", ".rar", ".7z", ".bz2", ".xz"]
+    },
+
+    "Skip": [".exe", ".bat", ".sh", ".cmd", ".msi", ".apk"]
+}
